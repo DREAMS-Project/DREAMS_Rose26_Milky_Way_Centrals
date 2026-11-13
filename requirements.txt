@@ -1,0 +1,19 @@
+# Versions used for the paper were not recorded; pin these once confirmed (see ISSUES.md).
+numpy
+scipy
+h5py
+pandas
+matplotlib>=3.9      # violinplot(side=...) in violin_gse.py
+mpi4py               # property scripts (run with mpirun)
+corner               # GSEprob.ipynb corner plots
+pyyaml
+# Emulators (NeHOD: https://github.com/trivnguyen/nehod_torch @ a2fb2d5, see README)
+torch
+pytorch_lightning
+ml_collections
+optuna
+zuko
+absl-py
+# Optional: nehod_weights/data/Calc_Master.ipynb
+# astropy
+# photutils
