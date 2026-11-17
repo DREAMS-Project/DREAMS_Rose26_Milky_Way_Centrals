@@ -144,9 +144,6 @@ def main():
     disk_weight = []
     for box in my_boxes:
 
-        if box == 698:
-            continue
-
         gpath = f'{group_path}/box_{box}/fof_subhalo_tab_{snap:03}.hdf5'
         spath = f'{snap_path}/box_{box}/snap_{snap:03}.hdf5'
         tpath = f'{group_path}/box_{box}/tree_extended.hdf5'
@@ -156,7 +153,7 @@ def main():
 
         if box in DREAMS.no_disk:
             continue
-        
+
         cat = DREAMS.load_group_data(gpath, keys)     #read DREAMS data
         pcat = DREAMS.load_particle_data(spath, part_keys, part_types=part_types)
         mw_idx = DREAMS.get_MW_idx(cat)        #find target MW
@@ -175,7 +172,6 @@ def main():
         if Ecut is None:
             halo_cut = DREAMS.select_halo_stars(galaxy_pcat, tree_cat, mw_idx)
             if np.median(eta) < 0.5:
-                #print(box, np.median(eta), "Pure Spheroid")
 
                 halo_indices = halo_cut
                 bulge_indices = ~halo_cut
@@ -184,7 +180,6 @@ def main():
                 thin_disk_indices = np.zeros(eta.shape[0],dtype=bool)
                 thick_disk_indices = np.zeros(eta.shape[0],dtype=bool)
             else:
-                #print(box, np.median(eta), "Pure Disk")
 
                 halo_indices = np.zeros(eta.shape[0],dtype=bool)
                 bulge_indices = np.zeros(eta.shape[0],dtype=bool)

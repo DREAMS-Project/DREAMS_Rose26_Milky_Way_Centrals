@@ -143,9 +143,6 @@ def main():
     disk_weight = []
     for box in my_boxes:
 
-        if box == 698:
-            continue
-
         gpath = f'{group_path}/box_{box}/fof_subhalo_tab_{snap:03}.hdf5'
         spath = f'{snap_path}/box_{box}/snap_{snap:03}.hdf5'
         tpath = f'{group_path}/box_{box}/tree_extended.hdf5'
@@ -153,9 +150,6 @@ def main():
         if rank == 0:
             print(box)
 
-        #if box in DREAMS.no_disk:
-        #    continue
-        
         cat = DREAMS.load_group_data(gpath, keys)     #read DREAMS data
         pcat = DREAMS.load_particle_data(spath, part_keys, part_types=[4])
         mw_idx = DREAMS.get_MW_idx(cat)        #find target MW
@@ -180,29 +174,13 @@ def main():
         epsilon = DREAMS.get_circularity(coords, vels, masses)
         disk_cut = DREAMS.select_disk_stars(epsilon, seed=box)
 
-        if np.sum(disk_cut) < 100:
+        if np.sum(disk_cut & (r>3)) < 5000:
             disk_weight.append(box)
             disk_mass.append(6)
             disk_rad.append(0.3)
             continue
 
-        #if np.sum(disk_cut & (r>3)) < 5000:
-        #    print("!!!!!", box)
-        #    continue
-
-        #fig, ax = DREAMS.set_plot_params()
-        #bs, be, bn = binned_statistic(epsilon, disk_cut, 'mean', np.linspace(-1,1,40))
-        #ax.plot((be[1:]+be[:-1])/2, bs, 'k-')
-        #fig.savefig(f"plots/disk_size/box_{box}.pdf", bbox_inches='tight')
-        #return
-
-        #has_disk = np.sum(epsilon > 0.7) / len(epsilon) > 0.2
-        #if box in DREAMS.no_disk:
-        #    continue
-
         scale_len = get_disk_size(box,coords[disk_cut], vels[disk_cut], masses[disk_cut])
-
-        #weight = DREAMS.get_weight(param_path, weight_path, box)
 
         disk_weight.append(box)
         disk_mass.append(np.log10(np.sum(masses[disk_cut])))

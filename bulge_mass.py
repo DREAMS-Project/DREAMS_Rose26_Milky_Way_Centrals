@@ -40,11 +40,6 @@ def main():
     weights = []
     for box in my_boxes:
 
-        if box == 698:
-            continue
-
-        #if not box in DREAMS.no_disk and not box in DREAMS.no_bulge:
-        #    continue
 
         gpath = f'{group_path}/box_{box}/fof_subhalo_tab_{snap:03}.hdf5'
         spath = f'{snap_path}/box_{box}/snap_{snap:03}.hdf5'
@@ -76,6 +71,9 @@ def main():
         r = np.sqrt(np.sum(np.square(coords),axis=1))
         epsilon = DREAMS.get_circularity(coords, vels, masses)
         disk_cut = DREAMS.select_disk_stars(epsilon, seed=box)
+
+        if np.sum(disk_cut & (r>3)) < 5000:
+            continue
 
         coords = (galaxy_pcat['PartType4/Coordinates'] - galaxy_cat['GroupPos'])/h
         vels = galaxy_pcat['PartType4/Velocities'] - galaxy_cat['GroupVel']

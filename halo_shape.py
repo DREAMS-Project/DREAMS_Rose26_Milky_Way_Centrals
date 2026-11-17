@@ -76,12 +76,6 @@ def main():
     weights = []
     for box in my_boxes:
 
-        if box == 698:
-            continue
-
-        #if box in DREAMS.no_disk:
-        #    continue 
-
         gpath = f'{group_path}/box_{box}/fof_subhalo_tab_{snap:03}.hdf5'
         spath = f'{snap_path}/box_{box}/snap_{snap:03}.hdf5'
         tpath = f'{group_path}/box_{box}/tree_extended.hdf5'
@@ -117,17 +111,11 @@ def main():
         epsilon = DREAMS.get_circularity(disk_coords, disk_vels, masses[wind_cut][~halo_cut])
         disk_cut = DREAMS.select_disk_stars(epsilon, seed=box)
 
-        #has_disk = np.sum(epsilon > 0.7) / len(epsilon) > 0.2
-        #if np.sum(disk_cut & (r>3)) < 100 or not has_disk or box in DREAMS.no_disk:
-        #    continue
+        if np.sum(disk_cut & (r>3)) < 5000:
+            continue
 
         halo_coords = np.array(list(coords[wind_cut][halo_cut]) + list(coords[wind_cut][~halo_cut][~disk_cut]))
         halo_smass = np.array(list(masses[wind_cut][halo_cut]) + list(masses[wind_cut][~halo_cut][~disk_cut]))
-
-        #r = np.sqrt(np.sum(np.square(coords),axis=1))
-        #if np.sum(r > 10) < 100:
-        #    print(box,"test")
-        #    continue
 
         phi, theta = DREAMS.get_rotate_data(coords[wind_cut][~halo_cut], vels[wind_cut][~halo_cut], masses[wind_cut][~halo_cut], face_on=True, get_pt=True)
 
